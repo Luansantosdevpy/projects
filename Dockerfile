@@ -1,7 +1,5 @@
 FROM node:gallium-alpine
 
-WORKDIR /app
-
 COPY package*.json yarn.lock ./
 COPY tsconfig*.json ./
 COPY ./src ./src
