@@ -1,31 +1,39 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { User } from './User';
 
-@Entity('projects')
+@Entity()
 export class Project {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column()
-    title: string;
+  @Column()
+  title: string;
 
-    @Column()
-    zip_code: string;
+  @Column()
+  zip_code: string;
 
-    @Column()
-    cost: number;
+  @Column()
+  cost: number;
 
-    @Column()
-    done: boolean;
+  @Column()
+  done: boolean;
 
-    @Column({ type: 'date' })
-    deadline: Date;
+  @Column()
+  deadline: Date;
 
-    @Column()
-    username: string;
+  @Column()
+  username: string;
 
-    @Column({ type: 'date' })
-    created_at: Date;
+  @Column()
+  created_at: Date;
 
-    @Column({ type: 'date' })
-    updated_at: Date;
+  @Column()
+  updated_at: Date;
+
+  @ManyToOne(() => User, user => user.projects)
+  user: User;
 }
+
+
+
+
