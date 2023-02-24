@@ -18,8 +18,6 @@ export class UserController {
 
 			const hashPassword = await bcrypt.hash(password, 10)
 
-			console.log(hashPassword)
-
 			const newUser = userRepository.create({ 
 				id: uuidv4(),
 				name,

@@ -1,14 +1,24 @@
 import { Router } from 'express'
+import { ProjectController } from './controllers/projectController'
 import { UserController } from './controllers/userController'
 import { authMiddleware } from './middlewares/authMiddlware'
 
-const router = Router()
+export default async (): Promise<Router> => {
+    const projectController = new ProjectController()
+    const userController = new UserController()
+    const router = Router()
 
-router.post('/user', new UserController().create)
-router.post('/login', new UserController().login)
+    router.post('/user', userController.create)
+    router.post('/login', userController.login)
+    router.get('/projects', projectController.projects)
+    router.get('/project/:id', projectController.project)
+    router.post('/project', projectController.create)
+    
+    router.use(authMiddleware)
+    
+    router.get('/profile', new UserController().getProfile)
 
-router.use(authMiddleware)
+    return router
+}
 
-router.get('/profile', new UserController().getProfile)
 
-export default router
