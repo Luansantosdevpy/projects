@@ -10,16 +10,19 @@ export class UserController {
 
 		const userExists = await userRepository.findOneBy({ email })
 
-		if (userExists) {
-			throw new BadRequestError('E-mail já existe')
+		if(userExists){
+			throw new BadRequestError('Email already exists');
+			
 		}
 
 		const hashPassword = await bcrypt.hash(password, 10)
 
-		const newUser = userRepository.create({
+		console.log(hashPassword)
+
+		const newUser = userRepository.create({ 
 			name,
 			email,
-			password: hashPassword,
+			password: hashPassword
 		})
 
 		await userRepository.save(newUser)
@@ -57,6 +60,6 @@ export class UserController {
 	}
 
 	async getProfile(req: Request, res: Response) {
-		// return res.json(req.user)
+		return res.json(req.user)
 	}
 }

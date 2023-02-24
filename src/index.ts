@@ -1,21 +1,18 @@
-import express from 'express';
-import { AppDataSourse } from './data-source';
+import 'express-async-errors'
+import express from 'express'
+import { AppDataSourse } from './data-source'
 import { errorMiddleware } from './middlewares/error'
-import routes from './router';
+import routes from './router'
 
 AppDataSourse.initialize().then(() => {
-    const app = express();
+	const app = express()
 
-    app.use(express.json());
+	app.use(express.json())
 
-    app.use(routes)
+	app.use(routes)
 
 	app.use(errorMiddleware)
-
-    app.get('/', (req, res) => {
-        return res.json('health-check');
-    })
-
-    return app.listen(process.env.PORT);
-
+	return app.listen(process.env.PORT, function () {
+        console.log(`listening on port ${process.env.PORT}!`);
+      })
 })

@@ -1,5 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { User } from './User';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Project {
@@ -29,9 +28,6 @@ export class Project {
 
   @Column()
   updated_at: Date;
-
-  @ManyToOne(() => User, user => user.projects)
-  user: User;
 }
 
 
