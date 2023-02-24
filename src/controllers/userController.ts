@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { Request, Response } from 'express'
 import { BadRequestError } from '../helpers/api-error'
 import { userRepository } from '../repositories/userRepository'
@@ -6,30 +7,35 @@ import jwt from 'jsonwebtoken'
 
 export class UserController {
 	async create(req: Request, res: Response) {
-		const { name, email, password } = req.body
+		try {
+			const { name, email, password } = req.body
 
-		const userExists = await userRepository.findOneBy({ email })
+			const userExists = await userRepository.findOneBy({ email })
 
-		if(userExists){
-			throw new BadRequestError('Email already exists');
-			
+			if(userExists){
+				throw new Error('Email already exists');
+			}
+
+			const hashPassword = await bcrypt.hash(password, 10)
+
+			console.log(hashPassword)
+
+			const newUser = userRepository.create({ 
+				id: uuidv4(),
+				name,
+				email,
+				password: hashPassword
+			})
+
+			await userRepository.save(newUser)
+
+			const { password: _, ...user } = newUser
+
+			return res.status(201).json(user)	
+		} catch (error) {
+			console.log(error);
+			return res.status(400);
 		}
-
-		const hashPassword = await bcrypt.hash(password, 10)
-
-		console.log(hashPassword)
-
-		const newUser = userRepository.create({ 
-			name,
-			email,
-			password: hashPassword
-		})
-
-		await userRepository.save(newUser)
-
-		const { password: _, ...user } = newUser
-
-		return res.status(201).json(user)
 	}
 
 	async login(req: Request, res: Response) {
